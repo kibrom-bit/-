@@ -107,14 +107,51 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import html2pdf from 'html2pdf.js'
 
 const isDownloading = ref(false)
 
 const downloadPDF = async () => {
-  isDownloading.value = true
-  await new Promise(resolve => setTimeout(resolve, 800))
-  window.print()
-  isDownloading.value = false
+  isDownloading.value = true;
+  
+  // 1. Cast the result of querySelector to HTMLElement
+  const element = document.querySelector('.print\\:block') as HTMLElement; 
+
+  if (!element) {
+    window.print();
+    isDownloading.value = false;
+    return;
+  }
+
+const opt = {
+    margin: [0.5, 0.5] as [number, number],
+    filename: 'Gibi_Gubae_Manual_2018.pdf',
+    image: { 
+      type: 'jpeg' as const, // Add 'as const' here
+      quality: 0.98 
+    },
+    html2canvas: { 
+      scale: 2, 
+      useCORS: true,
+      logging: false,
+      letterRendering: true
+    },
+    jsPDF: { 
+      unit: 'in', 
+      format: 'letter', 
+      orientation: 'portrait' as const // Add 'as const' here too for safety
+    }
+  };
+
+  try {
+    // Generate and save the PDF
+    await html2pdf().set(opt).from(element).save();
+  } catch (error) {
+    console.error("PDF Generation failed", error);
+    window.print(); 
+  } finally {
+    isDownloading.value = false;
+  }
 }
 
 // Full department mapping based on your 11-page document

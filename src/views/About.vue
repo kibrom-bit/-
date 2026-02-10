@@ -34,7 +34,7 @@
         
         <div class="bg-slate-100 rounded-2xl aspect-video md:aspect-square flex items-center justify-center border border-slate-200 shadow-inner">
           <div class="text-center p-8">
-            <div class=" bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-2xl"><img src="../assets/enda.jpg" alt="እንዳ ኢየሱስ ግቢ ጉባኤ"></div>
+            <div class=" bg-white rounded-full flex items-center justify-center shadow-sm text-2xl"><img src="../assets/enda.jpg" alt="እንዳ ኢየሱስ ግቢ ጉባኤ"></div>
             <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">እንዳ ኢየሱስ</p>
           </div>
         </div>
