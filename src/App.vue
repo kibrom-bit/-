@@ -1,17 +1,15 @@
 <template>
   <div id="app" class="min-h-screen bg-gray-50 font-sans selection:bg-blue-100">
-    <!-- Header with sidebar toggle -->
     <Header 
       :sidebar-open="showTOC" 
       @toggle-sidebar="toggleTOC" 
       @sidebar-change="handleSidebarChange"
     />
     
-    <div class="no-print pb-24">
-      <div class="container mx-auto px-4 py-6 md:py-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="no-print pb-16">
+      <div class="container mx-auto px-4 py-4 md:py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
-          <!-- Desktop Sidebar -->
           <aside 
             v-if="showTOC"
             class="lg:col-span-3 transition-all duration-300 hidden lg:block"
@@ -20,13 +18,12 @@
               :pages="pages" 
               :currentPage="currentPage"
               @select-page="goToPage"
-              class="sticky top-6 bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+              class="sticky top-4 bg-white rounded-lg shadow-sm border border-gray-100 p-4"
             />
           </aside>
           
-          <!-- Main content area -->
-          <main :class="['transition-all duration-300', showTOC ? 'lg:col-span-9' : 'lg:col-span-12']">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+          <main :class="['transition-all duration-300', (showTOC && !isMobile) ? 'lg:col-span-9' : 'lg:col-span-12']">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-6">
               <router-view 
                 :pages="pages"
                 @page-change="handlePageChange"
@@ -37,61 +34,49 @@
       </div>
     </div>
 
-    <!-- Mobile sidebar drawer -->
     <transition name="slide">
       <div 
         v-if="showTOC && isMobile"
-        class="lg:hidden fixed inset-0 z-50 bg-white shadow-xl overflow-y-auto"
+        class="lg:hidden fixed inset-y-0 left-0 z-[100] w-[280px] bg-white shadow-2xl flex flex-col"
       >
-        <div class="p-4">
-          <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-200">
-            <h2 class="text-xl font-bold text-slate-900">የጉባኤ ዝርዝር</h2>
-            <button 
-              @click="toggleTOC"
-              class="p-2 rounded-full hover:bg-gray-100 transition-colors"
-            >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-              </svg>
-            </button>
-          </div>
+        <div class="p-4 flex justify-between items-center border-b border-gray-100 bg-slate-50">
+          <h2 class="text-lg font-bold text-slate-900">የጉባኤ ዝርዝር</h2>
+          <button @click="toggleTOC" class="p-2 text-gray-500 hover:bg-gray-200 rounded-full">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="flex-grow overflow-y-auto p-4">
           <TableOfContents 
             :pages="pages" 
             :currentPage="currentPage"
-            @select-page="handleMobileSelect"
-            class="mobile-sidebar"
+            @select-page="goToPage"
           />
         </div>
       </div>
     </transition>
 
-    <!-- Backdrop for mobile -->
     <transition name="fade">
       <div 
         v-if="showTOC && isMobile"
         @click="toggleTOC"
-        class="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+        class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[90]"
       ></div>
     </transition>
 
-    <!-- Print content -->
     <div class="hidden print:block bg-white text-black p-0">
       <div v-for="page in pages" :key="page.id" class="print-page">
-        <div class="flex justify-between items-end border-b-2 border-slate-900 pb-2 mb-10">
+        <div class="flex justify-between items-end border-b-2 border-slate-900 pb-2 mb-6">
           <div class="font-black text-[10px] uppercase tracking-tighter">የግቢ ጉባኤ የሥራ አስፈጻሚ መመሪያ</div>
           <div class="font-serif italic text-xs">ገጽ {{ page.id }} / {{ pages.length }}</div>
         </div>
-
         <div class="max-w-4xl mx-auto">
-          <h1 class="text-4xl font-bold mb-8 text-slate-900 leading-tight">{{ page.title }}</h1>
-          <div class="content-box whitespace-pre-line text-lg leading-[1.8] text-justify font-serif">
+          <h1 class="text-3xl font-bold mb-4 text-slate-900 leading-tight">{{ page.title }}</h1>
+          <div class="content-box whitespace-pre-line text-base leading-[1.6] text-justify font-serif">
             {{ page.content }}
           </div>
-        </div>
-
-        <div class="mt-20 pt-8 border-t border-slate-100 text-[9px] text-gray-400 flex justify-between uppercase tracking-widest">
-          <span>የእንዳ ኢየሱስ ግቢ ጉባኤ</span>
-          <span>© 2018 ዓ.ም</span>
         </div>
       </div>
     </div>
@@ -105,80 +90,65 @@ import Header from './components/Header.vue'
 import TableOfContents from './components/TableOfContents.vue'
 
 const router = useRouter()
-const showTOC = ref(true)
+const showTOC = ref(false)
 const currentPage = ref(1)
 const isMobile = ref(false)
 
-// Check if mobile view
+
 const checkMobile = () => {
   isMobile.value = window.innerWidth < 1024
+  if (!isMobile.value) {
+    showTOC.value = true // Always show sidebar on desktop
+  }
 }
 
-// Toggle sidebar
 const toggleTOC = () => {
   showTOC.value = !showTOC.value
 }
 
-// Handle sidebar state change from header
 const handleSidebarChange = (isOpen: boolean) => {
   showTOC.value = isOpen
 }
 
-// Navigation functions
 const goToPage = (pageId: number) => {
   currentPage.value = pageId
   router.push(`/page/${pageId}`)
-  // Auto-close sidebar on mobile after selection
   if (isMobile.value) {
-    showTOC.value = false
+    showTOC.value = false // Auto-close drawer on selection
   }
-}
-
-const handleMobileSelect = (pageId: number) => {
-  goToPage(pageId)
 }
 
 const handlePageChange = (newPage: number) => {
   currentPage.value = newPage
 }
 
-// Navigation helper functions
-const prevPage = () => { 
-  if (currentPage.value > 1) goToPage(currentPage.value - 1) 
-}
-
-const nextPage = () => { 
-  if (currentPage.value < pages.value.length) goToPage(currentPage.value + 1) 
-}
-
-const jumpToPage = (pageNum: number) => goToPage(pageNum)
-
-const downloadFullPDF = () => {
-  window.print()
-}
-
-// Watch for route changes to update current page
-watch(() => router.currentRoute.value.params.id, (newId) => {
-  const pageId = parseInt(newId as string) || 1
-  if (pageId !== currentPage.value) {
-    currentPage.value = pageId
+// Watchers
+watch(showTOC, (val) => {
+  if (isMobile.value && val) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
   }
 })
 
-// Setup
+watch(() => router.currentRoute.value.params.id, (newId) => {
+  const pageId = parseInt(newId as string) || 1
+  currentPage.value = pageId
+})
+
 onMounted(() => {
   checkMobile()
   window.addEventListener('resize', checkMobile)
-  
   const routePage = parseInt(router.currentRoute.value.params.id as string) || 1
   currentPage.value = routePage
+  showTOC.value = !isMobile.value
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', checkMobile)
+  document.body.style.overflow = ''
 })
 
-// Define all 24 pages with their content
 const pages = ref([
   {
     id: 1,
@@ -1009,3 +979,19 @@ const pages = ref([
 ])
 
 </script>
+<style scoped>
+/* Ensure smooth transitions */
+.slide-enter-active, .slide-leave-active {
+  transition: transform 0.3s ease;
+}
+.slide-enter-from, .slide-leave-to {
+  transform: translateX(-100%);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+</style>
