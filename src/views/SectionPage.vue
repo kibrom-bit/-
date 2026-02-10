@@ -121,10 +121,6 @@ const totalPages = computed(() => {
   return props.pages.length
 })
 
-const formattedContent = computed(() => {
-  if (!currentPageData.value?.content) return '<p>ይህ ገጽ አሁን ባዶ ነው</p>'
-  return marked(currentPageData.value.content)
-})
 
 const readTime = computed(() => {
   const content = currentPageData.value?.content || ''
@@ -138,6 +134,16 @@ const goToPage = (pageNumber: number) => {
     router.push(`/page/${pageNumber}`)
   }
 }
+const formattedContent = computed(() => {
+  if (!currentPageData.value?.content) return '<p>ይህ ገጽ አሁን ባዶ ነው</p>'
+  
+  // Test conversion
+  const testContent = '## የሙከራ ርዕስ\n\n### የሙከራ ንዑስ ርዕስ\n\nየሙከራ ይዘት\n\n1, የመጀመሪያ ነገር\n2, የሁለተኛ ነገር'
+  console.log('Original:', testContent)
+  console.log('Converted:', marked(testContent))
+  
+  return marked(currentPageData.value.content)
+})
 
 // Scroll progress calculation
 const calculateScrollProgress = () => {
@@ -185,6 +191,27 @@ onUnmounted(() => {
   left: 0;
   font-size: 1.5rem;
   top: -0.1em;
+}
+/* Add these styles to SectionPage.vue */
+:deep(h2) {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1e40af;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  padding-left: 1rem;
+  border-left: 4px solid #3b82f6;
+  background: linear-gradient(to right, #dbeafe, transparent);
+  padding: 0.75rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+:deep(h3) {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
 }
 
 /* Responsive improvements */

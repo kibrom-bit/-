@@ -1,3 +1,4 @@
+//home.vue
 <template>
   <div class="min-h-screen bg-[#fafafa] text-slate-900 selection:bg-blue-100 font-sans">
     <div class="mx-auto px-4 lg:px-12 py-8">

@@ -73,10 +73,8 @@
           <div class="font-serif italic text-xs">ገጽ {{ page.id }} / {{ pages.length }}</div>
         </div>
         <div class="max-w-4xl mx-auto">
-          <h1 class="text-3xl font-bold mb-4 text-slate-900 leading-tight">{{ page.title }}</h1>
-          <div class="content-box whitespace-pre-line text-base leading-[1.6] text-justify font-serif">
-            {{ page.content }}
-          </div>
+          <h1 class="text-3xl font-bold mb-6 text-slate-900 leading-tight">{{ page.title }}</h1>
+          <div class="content-box" v-html="renderMarkdown(page.content)"></div>
         </div>
       </div>
     </div>
@@ -88,13 +86,25 @@ import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Header from './components/Header.vue'
 import TableOfContents from './components/TableOfContents.vue'
+import { marked } from 'marked'
 
 const router = useRouter()
 const showTOC = ref(false)
 const currentPage = ref(1)
 const isMobile = ref(false)
 
+// Configure marked options
+marked.setOptions({
+  breaks: true,
+  gfm: true
+})
 
+const renderMarkdown = (text: string) => {
+  if (!text) return '';
+  
+  // Use the 'marked' library instead of manual .replace()
+  return marked.parse(text); 
+}
 const checkMobile = () => {
   isMobile.value = window.innerWidth < 1024
   if (!isMobile.value) {
@@ -979,8 +989,8 @@ const pages = ref([
 ])
 
 </script>
-<style scoped>
-/* Ensure smooth transitions */
+<style>
+/* 1. Transitions & Layout (Keep these global or move to a separate scoped block if preferred) */
 .slide-enter-active, .slide-leave-active {
   transition: transform 0.3s ease;
 }
@@ -993,5 +1003,111 @@ const pages = ref([
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+/* 2. Markdown Content Styling (V-HTML support) */
+/* We target .content-box directly. Since scoped is removed, this will work for v-html */
+.content-box {
+  font-family: 'Noto Sans Ethiopic', 'Abyssinica SIL', sans-serif;
+  line-height: 1.8;
+  color: #334155;
+}
+
+.content-box h2 {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #0f172a;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.5rem;
+}
+
+.content-box h3 {
+  display: block;
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #1e293b;
+}
+
+.content-box p {
+  margin-bottom: 1.25rem;
+  text-align: justify;
+}
+
+.content-box ol {
+  list-style-type: decimal;
+  margin-left: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.content-box ul {
+  list-style-type: disc;
+  margin-left: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.content-box li {
+  margin-bottom: 0.5rem;
+}
+
+/* 3. Print / PDF Specific Styling */
+@media print {
+  /* Force background colors and remove shadows for clean PDF */
+  body {
+    background-color: white !important;
+  }
+
+  .print-page {
+    page-break-after: always;
+    padding: 2rem 0;
+  }
+
+  /* Reset Noto Sans for print clarity */
+  .content-box {
+    font-size: 12pt !important;
+    color: black !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Heading Overrides for PDF */
+  .content-box h2 {
+    font-size: 20pt !important;
+    border-bottom: 1pt solid #000 !important;
+    margin-top: 25pt !important;
+    color: black !important;
+    page-break-after: avoid;
+  }
+
+  .content-box h3 {
+    font-size: 16pt !important;
+    margin-top: 18pt !important;
+    color: black !important;
+    page-break-after: avoid;
+  }
+
+  .print:block h1 {
+    font-size: 26pt !important;
+    text-align: center !important;
+    margin-bottom: 30pt !important;
+  }
+  
+  /* Prevent lists from breaking across pages awkwardly */
+  li {
+    page-break-inside: avoid;
+  }
+}
+
+/* 4. Mobile Adjustments */
+@media (max-width: 768px) {
+  .content-box h2 {
+    font-size: 1.4rem;
+  }
+  .content-box h3 {
+    font-size: 1.2rem;
+  }
 }
 </style>
