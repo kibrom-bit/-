@@ -64,8 +64,9 @@ const emit = defineEmits(['toggle-sidebar', 'sidebar-change'])
 // Local state for sidebar
 const isSidebarOpen = ref(false)
 
-// Toggle sidebar function
+
 const toggleSidebar = () => {
+  // Always toggle the drawer regardless of screen size
   isSidebarOpen.value = !isSidebarOpen.value
   emit('toggle-sidebar', isSidebarOpen.value)
   emit('sidebar-change', isSidebarOpen.value)

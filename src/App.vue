@@ -34,35 +34,58 @@
       </div>
     </div>
 
-    <transition name="slide">
-      <div 
-        v-if="showTOC && isMobile"
-        class="lg:hidden fixed inset-y-0 left-0 z-[100] w-[280px] bg-white shadow-2xl flex flex-col"
-      >
-        <div class="p-4 flex justify-between items-center border-b border-gray-100 bg-slate-50">
-          <h2 class="text-lg font-bold text-slate-900">የጉባኤ ዝርዝር</h2>
-          <button @click="toggleTOC" class="p-2 text-gray-500 hover:bg-gray-200 rounded-full">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
-        
-        <div class="flex-grow overflow-y-auto p-4">
-          <TableOfContents 
-            :pages="pages" 
-            :currentPage="currentPage"
-            @select-page="goToPage"
-          />
-        </div>
+<transition name="slide">
+  <div 
+    v-if="showTOC && isMobile"
+    class="lg:hidden fixed inset-y-0 left-0 z-[100] w-[280px] bg-white shadow-2xl flex flex-col"
+  >
+    <div class="p-4 flex justify-between items-center border-b border-gray-100 bg-slate-50">
+      <h2 class="text-lg font-bold text-slate-900">የጉባኤ ዝርዝር</h2>
+      <button @click="toggleTOC" class="p-2 text-gray-500 hover:bg-gray-200 rounded-full">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="px-6 py-4 flex flex-col gap-4 border-b border-slate-100 bg-white">
+      <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">ዋና ዋና ገጾች</p>
+      <div class="flex flex-col gap-3">
+        <router-link 
+          to="/" 
+          @click="toggleTOC"
+          class="flex items-center gap-3 text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors"
+        >
+          <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+          መነሻ (Home)
+        </router-link>
+        <router-link 
+          to="/about" 
+          @click="toggleTOC"
+          class="flex items-center gap-3 text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors"
+        >
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+          ስለ እኛ (About)
+        </router-link>
       </div>
-    </transition>
+    </div>
+    
+    <div class="flex-grow overflow-y-auto p-4">
+      <p class="px-2 mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">የመመሪያው ዝርዝር</p>
+      <TableOfContents 
+        :pages="pages" 
+        :currentPage="currentPage"
+        @select-page="goToPage"
+      />
+    </div>
+  </div>
+</transition>
 
     <transition name="fade">
       <div 
         v-if="showTOC && isMobile"
         @click="toggleTOC"
-        class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[90]"
+        class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm "
       ></div>
     </transition>
 
