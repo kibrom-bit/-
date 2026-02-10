@@ -1,6 +1,10 @@
 <template>
-  <div class="w-full bg-white border-b border-slate-100 no-print">
-    
+  <div 
+    :class="[
+      'w-full bg-white/80 backdrop-blur-md border-b border-slate-100 no-print fixed top-0 z-50 transition-transform duration-300 ease-in-out',
+      isVisible ? 'translate-y-0' : '-translate-y-full'
+    ]"
+  >
     <header class="w-full h-14 flex items-center justify-center">
       <div class="max-w-6xl w-full px-6 flex items-center justify-between">
         
@@ -24,25 +28,23 @@
             <router-link to="/about" class="nav-link">ስለ እኛ</router-link>
           </nav>
 
-          <!-- Toggle Sidebar Button -->
           <button 
             @click="toggleSidebar"
             class="group flex items-center gap-2 h-8 px-4 rounded-full border border-slate-200 text-slate-900 hover:bg-slate-950 hover:text-white transition-all duration-300"
             :class="isSidebarOpen ? 'bg-slate-950 text-white' : ''"
           >
             <div class="flex flex-col items-end">
-              <!-- Animated hamburger menu -->
               <span 
-                class="w-4  bg-current transition-all duration-300"
-                :class="isSidebarOpen ? 'rotate-45 ' : ''"
+                class="w-4 h-0.5 bg-current transition-all duration-300"
+                :class="isSidebarOpen ? 'rotate-45 translate-y-[1.5px]' : ''"
               ></span>
               <span 
-                class="w-4 bg-current transition-all duration-300"
+                class="w-4 h-0.5 bg-current my-0.5 transition-all duration-300"
                 :class="isSidebarOpen ? 'opacity-0' : ''"
               ></span>
               <span 
-                class="w-3 bg-current transition-all duration-300 group-hover:w-4"
-                :class="isSidebarOpen ? '-rotate-45  w-4' : ''"
+                class="w-3 h-0.5 bg-current transition-all duration-300 group-hover:w-4"
+                :class="isSidebarOpen ? '-rotate-45 -translate-y-[1.5px] w-4' : ''"
               ></span>
             </div>
             <span class="text-[10px] font-bold uppercase tracking-widest">
@@ -53,31 +55,59 @@
       </div>
     </header>
   </div>
+
+  <div class="h-14 no-print"></div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 
-// Emit events for parent component
 const emit = defineEmits(['toggle-sidebar', 'sidebar-change'])
+const props = defineProps<{ sidebarOpen?: boolean }>()
 
-// Local state for sidebar
 const isSidebarOpen = ref(false)
+const isVisible = ref(true)
+const lastScrollPosition = ref(0)
 
+// Scroll Logic
+const handleScroll = () => {
+  const currentScrollPosition = window.scrollY || document.documentElement.scrollTop
+  
+  // 1. Safety check: avoid negative scroll on mobile/iOS
+  if (currentScrollPosition < 0) return
+
+  // 2. Always show at the very top
+  if (currentScrollPosition < 60) {
+    isVisible.value = true
+    lastScrollPosition.value = currentScrollPosition
+    return
+  }
+
+  // 3. Detect direction
+  // If scrolling down, hide it. If scrolling up, show it.
+  if (currentScrollPosition > lastScrollPosition.value) {
+    isVisible.value = false // scrolling down
+  } else {
+    isVisible.value = true // scrolling up
+  }
+
+  lastScrollPosition.value = currentScrollPosition
+}
 
 const toggleSidebar = () => {
-  // Always toggle the drawer regardless of screen size
   isSidebarOpen.value = !isSidebarOpen.value
   emit('toggle-sidebar', isSidebarOpen.value)
   emit('sidebar-change', isSidebarOpen.value)
 }
 
-// Optional: Sync with parent if parent controls state
-const props = defineProps<{
-  sidebarOpen?: boolean
-}>()
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
 
-// Watch for prop changes from parent
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
 watch(() => props.sidebarOpen, (newVal) => {
   if (newVal !== undefined) {
     isSidebarOpen.value = newVal
@@ -92,7 +122,6 @@ watch(() => props.sidebarOpen, (newVal) => {
   @apply text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 hover:text-slate-900 transition-colors relative;
 }
 
-/* Subtle dot indicator on hover */
 .nav-link::after {
   content: '';
   @apply absolute -bottom-1 left-1/2 w-0 h-0.5 bg-blue-600 transition-all duration-300 -translate-x-1/2 rounded-full;
@@ -102,23 +131,7 @@ watch(() => props.sidebarOpen, (newVal) => {
   @apply w-1;
 }
 
-/* Animation for hamburger menu */
-.rotate-45 {
-  transform: rotate(45deg);
-}
-
-.-rotate-45 {
-  transform: rotate(-45deg);
-}
-
-.translate-y-\[3px\] {
-  transform: translateY(3px);
-}
-
-.-translate-y-\[3px\] {
-  transform: translateY(-3px);
-}
-
+/* Print specific styles */
 @media print {
   .no-print {
     display: none !important;
