@@ -1,23 +1,24 @@
 <template>
   <div 
     :class="[
-      'w-full bg-white/80 backdrop-blur-md border-b border-slate-100 no-print fixed top-0 z-50 transition-transform duration-300 ease-in-out',
+      'w-full bg-white/10 backdrop-blur-sm border-b border-white/20 no-print fixed top-0 z-50 transition-transform duration-300 ease-in-out',
       isVisible ? 'translate-y-0' : '-translate-y-full'
     ]"
+    style="background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);"
   >
     <header class="w-full h-14 flex items-center justify-center">
       <div class="max-w-6xl w-full px-6 flex items-center justify-between">
         
         <div class="flex items-center gap-3">
           <router-link to="/" class="flex items-center gap-3">
-            <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-900 text-white font-serif text-sm">
+            <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-gradient from-slate-800 to-slate-900 text-white font-serif text-sm shadow-sm">
               መ
             </div>
             <div class="flex flex-col">
-              <h1 class="text-xs font-bold text-slate-900 tracking-tight leading-none">
+              <h1 class="text-xs font-bold text-slate-800 tracking-tight leading-none">
                 እንዳ ኢየሱስ ግቢ ጉባኤ
               </h1>
-              <span class="text-[8px] uppercase tracking-widest text-slate-400 font-medium mt-0.5">
+              <span class="text-[8px] uppercase tracking-widest text-slate-500 font-medium mt-0.5">
                 Manual 2018 ዓ.ም
               </span>
             </div>
@@ -32,29 +33,29 @@
             <router-link to="/schedule/second-semester-2018" class="nav-link" :class="{ 'active': $route.path.includes('/schedule') }">መርሐ ግብር</router-link>
           </nav>
 
-<button 
-  @click="toggleSidebar"
-  class="group flex items-center gap-2 h-8 px-4 rounded-full border border-slate-200 text-slate-900 hover:bg-slate-950 hover:text-white transition-all duration-300"
-  :class="isSidebarOpen ? 'bg-slate-950 text-white' : ''"
->
-  <div class="flex flex-col items-end">
-    <span 
-      class="w-4 h-0.5 bg-current transition-all duration-300"
-      :class="isSidebarOpen ? 'rotate-45 translate-y-[1.5px]' : ''"
-    ></span>
-    <span 
-      class="w-4 h-0.5 bg-current my-0.5 transition-all duration-300"
-      :class="isSidebarOpen ? 'opacity-0' : ''"
-    ></span>
-    <span 
-      class="w-3 h-0.5 bg-current transition-all duration-300 group-hover:w-4"
-      :class="isSidebarOpen ? '-rotate-45 -translate-y-[1.5px] w-4' : ''"
-    ></span>
-  </div>
-  <span class="text-[10px] font-bold uppercase tracking-widest">
-    {{ isSidebarOpen ? 'መዝጋት' : 'ማውጫ' }}
-  </span>
-</button>
+          <button 
+            @click="toggleSidebar"
+            class="group flex items-center gap-2 h-8 px-4 rounded-full border border-slate-200 bg-white/50 text-slate-700 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all duration-300"
+            :class="isSidebarOpen ? 'bg-slate-900 text-white border-slate-900' : ''"
+          >
+            <div class="flex flex-col items-end">
+              <span 
+                class="w-4 h-0.5 bg-current transition-all duration-300"
+                :class="isSidebarOpen ? 'rotate-45 translate-y-[1.5px]' : ''"
+              ></span>
+              <span 
+                class="w-4 h-0.5 bg-current my-0.5 transition-all duration-300"
+                :class="isSidebarOpen ? 'opacity-0' : ''"
+              ></span>
+              <span 
+                class="w-3 h-0.5 bg-current transition-all duration-300 group-hover:w-4"
+                :class="isSidebarOpen ? '-rotate-45 -translate-y-[1.5px] w-4' : ''"
+              ></span>
+            </div>
+            <span class="text-[10px] font-bold uppercase tracking-widest">
+              {{ isSidebarOpen ? 'መዝጋት' : 'ማውጫ' }}
+            </span>
+          </button>
         </div>
       </div>
     </header>
@@ -116,13 +117,14 @@ watch(() => props.sidebarOpen, (newVal) => {
 
 <style scoped>
 @reference "tailwindcss";
+
 .nav-link {
-  @apply text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 hover:text-slate-900 transition-colors relative;
+  @apply text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 hover:text-slate-900 transition-colors relative;
 }
 
 .nav-link::after {
   content: '';
-  @apply absolute -bottom-1 left-1/2 w-0 h-0.5 bg-blue-600 transition-all duration-300 -translate-x-1/2 rounded-full;
+  @apply absolute -bottom-1 left-1/2 w-0 h-0.5 bg-blue-500 transition-all duration-300 -translate-x-1/2 rounded-full;
 }
 
 .nav-link:hover::after,
