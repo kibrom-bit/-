@@ -1,3 +1,4 @@
+<!-- src/views/About.vue -->
 <template>
   <div class="min-h-screen bg-white">
     <section class="py-16 md:py-24 bg-slate-50 border-b border-slate-100">
