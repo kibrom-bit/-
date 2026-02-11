@@ -2,66 +2,41 @@
   <div class="min-h-screen bg-gray-50 relative font-['Noto_Sans_Ethiopic']">
     <!-- Progress Bar -->
     <div 
-      class="fixed top-0 left-0 h-1 from-blue-500 to-purple-500 z-50 transition-all duration-200 shadow-lg shadow-blue-500/30"
+      class="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 z-50 transition-all duration-200 shadow-lg shadow-blue-500/30"
       :style="{ width: scrollProgress + '%' }"
     ></div>
 
-    <!-- Floating Navigation Pill -->
-    <div class="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex bg-white rounded-full px-2 py-2 shadow-xl z-40 gap-2 border border-gray-200">
-      <button
-        v-if="pageId > 1"
-        @click="goToPage(pageId - 1)"
-        class="flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 hover:-translate-y-0.5 transition-all duration-200 "
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
-        <span class="text-sm">ተመለስ</span>
-      </button>
-      
-  
-      
-      <button
-        v-if="pageId < totalPages"
-        @click="goToPage(pageId + 1)"
-        class="flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-white bg-green-500 hover:bg-green-600 hover:-translate-y-0.5 transition-all duration-200 "
-      >
-        <span class="text-sm">ቀጥል</span>
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </button>
-    </div>
+    <!-- Header spacer -->
+    <div class="h-14"></div>
 
-    <div class="max-w-4xl mx-auto px-4 py-8 pb-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6"> <!-- Reduced padding -->
       <!-- Page Header -->
-      <div class="mb-8 pb-6 border-b border-gray-200 pt-4">
+      <div class="mb-6 pb-4 border-b border-gray-200"> <!-- Reduced margins -->
         <div class="flex justify-between items-start">
           <div>
-            <h1 class="text-4xl font-bold text-gray-900 mb-2 leading-tight">{{ pageTitle }}</h1>
-           
+            <h1 class="text-3xl font-bold text-gray-900 mb-2 leading-tight">{{ pageTitle }}</h1> <!-- Reduced text size -->
           </div>
-          <div class=" from-blue-500 to-purple-500 text-white rounded-full w-14 h-14 flex items-center justify-center font-bold text-xl shadow-lg shadow-blue-500/20">
+          <div class="bg-gradient-to-br from-blue-500 to-purple-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-500/20"> <!-- Reduced size -->
             {{ pageId }}
           </div>
         </div>
       </div>
      
-      <!-- Page Content -->
+      <!-- Page Content - Reduced padding -->
       <div 
         ref="contentElement" 
-        class="bg-white rounded-xl p-8 shadow-sm mb-8 prose prose-lg max-w-none prose-h1:text-3xl prose-h1:font-bold prose-h1:text-gray-900 prose-h1:mb-6 prose-h1:mt-8 prose-h1:pb-2 prose-h1:border-b prose-h1:border-gray-200 prose-h2:text-2xl prose-h2:font-semibold prose-h2:text-blue-800 prose-h2:mb-4 prose-h2:mt-6 prose-h2:pl-4 prose-h2:border-l-4 prose-h2:border-blue-500 prose-h2:bg-gradient-to-r prose-h2:from-blue-50 prose-h2:to-transparent prose-h2:py-3 prose-h2:rounded-r-lg prose-h3:text-xl prose-h3:font-medium prose-h3:text-gray-700 prose-h3:mb-3 prose-h3:mt-5 prose-p:text-gray-700 prose-p:mb-4 prose-p:text-lg prose-p:leading-relaxed prose-p:text-justify prose-ul:list-none prose-ul:pl-0 prose-ul:mb-6 prose-li:text-gray-700 prose-li:mb-3 prose-li:pl-8 prose-li:relative prose-li:leading-relaxed prose-strong:font-bold prose-strong:text-gray-900 prose-strong:bg-gradient-to-t prose-strong:from-blue-100 prose-strong:via-transparent prose-strong:to-transparent prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-blue-300 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:bg-gray-50 prose-blockquote:py-2 prose-blockquote:rounded-r"
+        class="bg-white rounded-xl p-6 shadow-sm mb-8 content-box" <!-- Changed: p-8 to p-6 -->
         v-html="formattedContent"
       ></div>
      
       <!-- Desktop Navigation -->
-      <div class="hidden md:flex justify-between items-center pt-8 border-t border-gray-200">
+      <div class="hidden md:flex justify-between items-center pt-6 border-t border-gray-200"> <!-- Reduced padding -->
         <button
           v-if="pageId > 1"
           @click="goToPage(pageId - 1)"
-          class="flex items-center gap-3 px-6 py-3 rounded-lg font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors duration-200"
+          class="flex items-center gap-3 px-5 py-2.5 rounded-lg font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors duration-200"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
           </svg>
           <span>ወደ ገጽ {{ pageId - 1 }}</span>
@@ -71,10 +46,10 @@
         <button
           v-if="pageId < totalPages"
           @click="goToPage(pageId + 1)"
-          class="flex items-center gap-3 px-6 py-3 rounded-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 transition-colors duration-200"
+          class="flex items-center gap-3 px-5 py-2.5 rounded-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 transition-colors duration-200"
         >
           <span>ወደ ገጽ {{ pageId + 1 }}</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
           </svg>
         </button>
@@ -93,18 +68,12 @@ interface Props {
   pages: Page[]
 }
 
-interface Emits {
-  (e: 'open-drawer'): void
-}
-
 const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
 const route = useRoute()
 const router = useRouter()
 const contentElement = ref<HTMLElement | null>(null)
 const scrollProgress = ref(0)
 
-// Get pageId from route params
 const pageId = computed(() => {
   return parseInt(route.params.id as string) || 1
 })
@@ -118,15 +87,7 @@ const pageTitle = computed(() => {
 })
 
 const totalPages = computed(() => {
-  return props.pages.length
-})
-
-
-const readTime = computed(() => {
-  const content = currentPageData.value?.content || ''
-  const wordsPerMinute = 200
-  const wordCount = content.split(/\s+/).length
-  return Math.ceil(wordCount / wordsPerMinute)
+  return props.pages.filter(p => p.id <= 11).length
 })
 
 const goToPage = (pageNumber: number) => {
@@ -134,41 +95,31 @@ const goToPage = (pageNumber: number) => {
     router.push(`/page/${pageNumber}`)
   }
 }
+
 const formattedContent = computed(() => {
   if (!currentPageData.value?.content) return '<p>ይህ ገጽ አሁን ባዶ ነው</p>'
-  
-  // Test conversion
-  const testContent = '## የሙከራ ርዕስ\n\n### የሙከራ ንዑስ ርዕስ\n\nየሙከራ ይዘት\n\n1, የመጀመሪያ ነገር\n2, የሁለተኛ ነገር'
-  console.log('Original:', testContent)
-  console.log('Converted:', marked(testContent))
-  
   return marked(currentPageData.value.content)
 })
 
-// Scroll progress calculation
 const calculateScrollProgress = () => {
   if (!contentElement.value) return
   
   const contentRect = contentElement.value.getBoundingClientRect()
   const windowHeight = window.innerHeight
-  const contentHeight = contentRect.height
-  
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop
   const elementTop = contentRect.top + scrollTop
-  const elementBottom = elementTop + contentHeight
-  
-  const scrollDistance = scrollTop - elementTop
+  const contentHeight = contentRect.height
   const maxScroll = contentHeight - windowHeight
   
   if (maxScroll <= 0) {
     scrollProgress.value = 100
   } else {
-    const progress = Math.min(100, Math.max(0, (scrollDistance / maxScroll) * 100))
+    const scrolled = Math.max(0, scrollTop - elementTop)
+    const progress = Math.min(100, (scrolled / maxScroll) * 100)
     scrollProgress.value = progress
   }
 }
 
-// Set up scroll listener
 onMounted(() => {
   window.addEventListener('scroll', calculateScrollProgress)
   window.addEventListener('resize', calculateScrollProgress)
@@ -181,51 +132,9 @@ onUnmounted(() => {
 })
 </script>
 
-<style>
-/* Custom bullet points for Ethiopic text */
-.prose li::before {
-  content: "•";
-  color: #3b82f6;
-  font-weight: bold;
-  position: absolute;
-  left: 0;
-  font-size: 1.5rem;
-  top: -0.1em;
-}
-/* Add these styles to SectionPage.vue */
-:deep(h2) {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #1e40af;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  padding-left: 1rem;
-  border-left: 4px solid #3b82f6;
-  background: linear-gradient(to right, #dbeafe, transparent);
-  padding: 0.75rem;
-  border-radius: 0 0.5rem 0.5rem 0;
-}
-
-:deep(h3) {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #374151;
-  margin-top: 1.25rem;
-  margin-bottom: 0.75rem;
-}
-
-/* Responsive improvements */
+<style scoped>
+/* Remove all prose styles, use content-box from App.vue */
 @media (max-width: 768px) {
-  .floating-nav-pill {
-    bottom: 1rem;
-    padding: 0.25rem;
-  }
-  
-  .pill-button {
-    padding: 0.5rem 1rem;
-    min-width: 80px;
-  }
-  
   .max-w-4xl {
     padding: 1rem 0.5rem 6rem;
   }
