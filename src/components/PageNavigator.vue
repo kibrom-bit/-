@@ -96,6 +96,7 @@ const printDocument = () => {
 </script>
 
 <style scoped>
+@reference "tailwindcss";
 @media print {
   nav {
     display: none !important;
