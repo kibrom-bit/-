@@ -9,23 +9,24 @@
     <!-- Header spacer -->
     <div class="h-14"></div>
     
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6"> <!-- Changed: reduced padding -->
+    <!-- Changed: removed max-w-4xl and reduced padding -->
+    <div class="mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
       <!-- Page Header -->
-      <div class="mb-6 pb-4 border-b border-gray-200"> <!-- Reduced margins -->
+      <div class="mb-6 pb-4 border-b border-gray-200 max-w-4xl mx-auto"> <!-- Added max-w-4xl only to header -->
         <div class="flex justify-between items-start">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2 leading-tight">{{ title }}</h1> <!-- Reduced text size -->
+            <h1 class="text-3xl font-bold text-gray-900 mb-2 leading-tight">{{ title }}</h1>
             <slot name="header-actions"></slot>
           </div>
-          <div class="bg-gradient-to-br from-blue-500 to-purple-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-500/20"> <!-- Reduced size -->
+          <div class="bg-gradient-to-br from-blue-500 to-purple-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-500/20">
             {{ pageId }}
           </div>
         </div>
       </div>
      
-      <!-- Page Content - Reduced padding -->
-      <div ref="contentElement" class="bg-white rounded-xl p-6 shadow-sm"> <!-- Changed: p-8 to p-6 -->
-        <div class="content-box">
+      <!-- Page Content - Full width table container -->
+      <div ref="contentElement" class="bg-white rounded-xl shadow-sm w-full">
+        <div class="p-4 md:p-6 content-box w-full overflow-x-auto"> <!-- Added overflow-x-auto for tables -->
           <slot></slot>
         </div>
       </div>
@@ -40,7 +41,6 @@
     />
   </div>
 </template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
