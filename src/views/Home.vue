@@ -1,8 +1,8 @@
-//home.vue
 <template>
   <div class="min-h-screen bg-[#fafafa] text-slate-900 selection:bg-blue-100 font-sans">
     <div class="mx-auto px-4 lg:px-12 py-8">
       
+      <!-- Hero Section -->
       <section class="relative flex flex-col lg:flex-row gap-8 lg:gap-12 items-end mb-16">
         <div class="lg:w-2/3 border-l-4 border-slate-900 pl-6 md:pl-12 py-3">
           <div class="flex items-center gap-3 mb-6">
@@ -31,72 +31,34 @@
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </router-link>
             
-            <button @click="downloadPDF" :disabled="isDownloading" class="editorial-btn-secondary">
-              <span v-if="isDownloading" class="animate-pulse">Processing Document...</span>
-              <span v-else>Download Full PDF Archive</span>
-            </button>
+
           </div>
         </div>
       </section>
 
-      <div class="grid grid-cols-12 gap-4 lg:gap-6">
-        
-        <template v-for="dept in departments" :key="dept.id">
-          <router-link 
-            :to="`/page/${dept.id}`" 
-            :class="[dept.span, 'relative overflow-hidden transition-all duration-500 hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.1)] group']"
-          >
-            <div v-if="dept.theme === 'dark'" class="bg-slate-900 text-white p-6 flex flex-col justify-between h-full">
-              <div class="space-y-3">
-                <div class="w-12 h-1 bg-blue-500"></div>
-                <h2 class="text-3xl font-bold">{{ dept.title }}</h2>
-                <p class="text-slate-400 max-w-sm text-sm">{{ dept.desc }}</p>
-              </div>
-              <div class="flex justify-between items-end pt-6">
-                <span class="text-xs tracking-[0.3em] uppercase font-bold text-blue-400 group-hover:pl-4 transition-all">{{ dept.tag }}</span>
-                <span class="text-3xl font-serif text-slate-800">{{ dept.id < 10 ? '0' + dept.id : dept.id }}</span>
-              </div>
-            </div>
-
-            <div v-else-if="dept.theme === 'light'" class="bg-white border border-slate-100 p-6 flex flex-col justify-between h-full">
-              <div>
-                <span class="text-blue-600 font-mono text-xs mb-3 block">{{ dept.tag }}</span>
-                <h2 class="text-2xl font-bold mb-3 group-hover:text-blue-600 transition-colors">{{ dept.title }}</h2>
-                <p class="text-slate-500 max-w-sm text-sm">{{ dept.desc }}</p>
-              </div>
-              <div class="flex items-end justify-between mt-4">
-                <div class="text-4xl font-serif text-slate-50 group-hover:text-blue-50 transition-colors">{{ dept.title.split(' ')[0] }}</div>
-                <div class="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all">
-                  →
-                </div>
-              </div>
-            </div>
-
-            <div v-else-if="dept.theme === 'bordered'" class="border-2 border-dashed border-slate-200 hover:border-blue-500 hover:bg-white p-6 flex flex-col justify-between h-full">
-              <div>
-                <h2 class="text-xl font-bold mb-2">{{ dept.title }}</h2>
-                <p class="text-slate-500 text-xs leading-relaxed">{{ dept.desc }}</p>
-              </div>
-              <div class="flex gap-2 pt-4">
-                <div class="px-3 py-1 rounded-full bg-slate-100 text-[10px] font-bold uppercase tracking-wider">{{ dept.tag }}</div>
-              </div>
-            </div>
-
-            <div v-else class="bg-blue-600 text-white p-6 flex flex-col justify-between h-full">
-              <div class="space-y-3">
-                <h2 class="text-2xl font-bold">{{ dept.title }}</h2>
-                <p class="text-blue-100 opacity-80 text-sm">{{ dept.desc }}</p>
-              </div>
-              <div class="text-right">
-                <span class="text-6xl font-black opacity-10 leading-none">!!</span>
-              </div>
-            </div>
-
-          </router-link>
-        </template>
-
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-12 gap-4 lg:gap-6 mb-12">
+        <div class="col-span-12 lg:col-span-4 bg-white p-6 border-l-4 border-blue-500 shadow-sm">
+          <div class="text-2xl font-black text-blue-600 mb-2">11</div>
+          <div class="text-sm font-bold text-gray-700">የሥራ አመራር ክፍሎች</div>
+          <div class="text-xs text-gray-500 mt-2">በመመሪያው መሠረት የተደራጁ</div>
+        </div>
+        <div class="col-span-12 lg:col-span-4 bg-white p-6 border-l-4 border-green-500 shadow-sm">
+          <div class="text-2xl font-black text-green-600 mb-2">600+</div>
+          <div class="text-sm font-bold text-gray-700">የቴሌግራም ቻናል አባላት</div>
+          <div class="text-xs text-gray-500 mt-2">ወቅታዊ መረጃዎችን ለማድረስ</div>
+        </div>
+        <div class="col-span-12 lg:col-span-4 bg-white p-6 border-l-4 border-purple-500 shadow-sm">
+          <div class="text-2xl font-black text-purple-600 mb-2">1M+</div>
+          <div class="text-sm font-bold text-gray-700">የልማት ቀን ግብ</div>
+          <div class="text-xs text-gray-500 mt-2">ሁለተኛ ሴሚስተር ዒላማ</div>
+        </div>
       </div>
 
+      <!-- Department Grid -->
+      <DepartmentGrid />
+      
+      <!-- Footer -->
       <footer class="mt-16 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 no-print">
         <div class="font-serif text-xl italic text-slate-400">እንዳ ኢየሱስ ግቢ ጉባኤ</div>
         <div class="text-[10px] tracking-widest text-slate-400 uppercase">© 2018 ዓ.ም - የሥራ መመሪያ</div>
@@ -106,55 +68,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import html2pdf from 'html2pdf.js'
+import DepartmentGrid from '@/components/home/DepartmentGrid.vue'
+import { usePDF } from '@/composables/usePDF'
 
-const isDownloading = ref(false)
+const { isDownloading, downloadPDF } = usePDF()
 
-const downloadPDF = async () => {
-  isDownloading.value = true;
-  
-  // 1. Cast the result of querySelector to HTMLElement
-  const element = document.querySelector('.print\\:block') as HTMLElement; 
-
-  if (!element) {
-    window.print();
-    isDownloading.value = false;
-    return;
-  }
-
-const opt = {
-    margin: [0.5, 0.5] as [number, number],
-    filename: 'Gibi_Gubae_Manual_2018.pdf',
-    image: { 
-      type: 'jpeg' as const, // Add 'as const' here
-      quality: 0.98 
-    },
-    html2canvas: { 
-      scale: 2, 
-      useCORS: true,
-      logging: false,
-      letterRendering: true
-    },
-    jsPDF: { 
-      unit: 'in', 
-      format: 'letter', 
-      orientation: 'portrait' as const // Add 'as const' here too for safety
-    }
-  };
-
-  try {
-    // Generate and save the PDF
-    await html2pdf().set(opt).from(element).save();
-  } catch (error) {
-    console.error("PDF Generation failed", error);
-    window.print(); 
-  } finally {
-    isDownloading.value = false;
-  }
+const handleDownloadPDF = async () => {
+  // Use the same selector that worked before
+  await downloadPDF('.print\\:block', 'Enda_Eyesus_Gibi_Gubae_Complete_Manual_2018.pdf')
 }
 
-// Full department mapping based on your 11-page document
+// Full department mapping
 const departments = [
   { id: 1, title: 'ጠቅላላ ጉባኤ', tag: 'Governance', desc: 'የሥራ አስፈጻሚ አባላትን መምረጥና አጠቃላይ የሥራ ሂደቱን መገምገም፡', span: 'col-span-12 lg:col-span-8', theme: 'dark' },
   { id: 2, title: 'የሥራ አስፈጻሚ ጽ/ቤት', tag: 'Leadership', desc: 'የግቢ ጉባኤውን ሥራ በበላይነት መምራትና ዕቅዶችን ማዘጋጀት፡', span: 'col-span-12 lg:col-span-4', theme: 'light' },
@@ -171,6 +95,8 @@ const departments = [
 </script>
 
 <style scoped>
+@reference "tailwindcss";
+
 .editorial-btn-primary {
   display: flex;
   align-items: center;
@@ -215,14 +141,9 @@ const departments = [
   background-color: #f8fafc;
 }
 
-/* Print styles */
 @media print {
   .no-print { 
     display: none !important; 
-  }
-  .editorial-card { 
-    border: 1px solid #eee !important; 
-    break-inside: avoid; 
   }
 }
 </style>
