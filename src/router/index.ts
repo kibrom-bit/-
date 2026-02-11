@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import type { RouteLocationNormalized } from 'vue-router'
 
+// Your files are in views/, not pages/
 const Home = () => import('@/views/Home.vue')
 const SectionPage = () => import('@/views/SectionPage.vue')
-// Add the About view here
 const About = () => import('@/views/About.vue')
+const FirstSemesterReport = () => import('@/pages/FirstSemesterReportPage.vue')
+const SecondSemesterSchedule = () => import('@/pages/SecondSemesterSchedulePage.vue')
 
 const routes: RouteRecordRaw[] = [
   {
@@ -13,7 +15,7 @@ const routes: RouteRecordRaw[] = [
     component: Home
   },
   {
-    path: '/about', // The path you used in your Header router-link
+    path: '/about',
     name: 'About',
     component: About
   },
@@ -24,13 +26,26 @@ const routes: RouteRecordRaw[] = [
     props: (route: RouteLocationNormalized) => ({ 
       id: parseInt(route.params.id as string) || 1 
     })
+  },
+  {
+    path: '/report/first-semester-2018',
+    name: 'FirstSemesterReport',
+    component: FirstSemesterReport
+  },
+  {
+    path: '/schedule/second-semester-2018',
+    name: 'SecondSemesterSchedule',
+    component: SecondSemesterSchedule
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/'
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  // Recommended: Scroll to top when switching pages
   scrollBehavior() {
     return { top: 0 }
   }
