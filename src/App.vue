@@ -15,7 +15,7 @@
             class="lg:col-span-3 transition-all duration-300 hidden lg:block"
           >
             <TableOfContents 
-              :pages="pages" 
+              :pages="sortedPages" 
               :currentPage="currentPage"
               @select-page="goToPage"
               class="sticky top-4 bg-white rounded-lg shadow-sm border border-gray-100 p-4"
@@ -25,7 +25,7 @@
           <main :class="['transition-all duration-300', (showTOC && !isMobile) ? 'lg:col-span-9' : 'lg:col-span-12']">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-6">
               <router-view 
-                :pages="pages"
+                :pages="sortedPages" 
                 @page-change="handlePageChange"
               />
             </div>
@@ -38,7 +38,7 @@
     <transition name="slide">
       <div 
         v-if="showTOC && isMobile"
-        class="lg:hidden fixed inset-y-0 left-0 z-[100] w-[280px] bg-white shadow-2xl flex flex-col"
+        class="lg:hidden fixed inset-y-0 left-0 w-[280px] bg-white shadow-2xl flex flex-col"
       >
         <div class="p-4 flex justify-between items-center border-b border-gray-100 bg-slate-50">
           <h2 class="text-lg font-bold text-slate-900">የጉባኤ ዝርዝር</h2>
@@ -71,10 +71,10 @@
           </div>
         </div>
         
-        <div class="flex-grow overflow-y-auto p-4">
+        <div class="overflow-y-auto p-4">
           <p class="px-2 mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">የመመሪያው ዝርዝር</p>
           <TableOfContents 
-            :pages="pages" 
+            :pages="sortedPages" 
             :currentPage="currentPage"
             @select-page="goToPage"
           />
@@ -90,18 +90,18 @@
       ></div>
     </transition>
 
-<div class="hidden print:block bg-white text-black p-8">
-  <div v-for="page in sortedPages" :key="page.id" class="print-page mb-12 pb-12" :class="{ 'page-break': page.id !== sortedPages[sortedPages.length - 1]?.id }">
-    <div class="flex justify-between items-end border-b-2 border-slate-900 pb-2 mb-6">
-      <div class="font-black text-[10px] uppercase tracking-tighter">የእንዳ ኢየሱስ ግቢ ጉባኤ - የሥራ አስፈጻሚ መመሪያ 2018 ዓ.ም</div>
-      <div class="font-serif italic text-xs">ገጽ {{ getPageNumber(page.id) }} / 13</div>
+    <div class="hidden print:block bg-white text-black p-8">
+      <div v-for="page in sortedPages" :key="page.id" class="print-page mb-12 pb-12" :class="{ 'page-break': page.id !== sortedPages[sortedPages.length - 1]?.id }">
+        <div class="flex justify-between items-end border-b-2 border-slate-900 pb-2 mb-6">
+          <div class="font-black text-[10px] uppercase tracking-tighter">የእንዳ ኢየሱስ ግቢ ጉባኤ - የሥራ አስፈጻሚ መመሪያ 2018 ዓ.ም</div>
+          <div class="font-serif italic text-xs">ገጽ {{ getPageNumber(page.id) }} / {{ sortedPages.length }}</div> <!-- Use dynamic total -->
+        </div>
+        <div class="max-w-4xl mx-auto">
+          <h1 class="text-3xl font-bold mb-6 text-slate-900 leading-tight">{{ page.title }}</h1>
+          <div class="content-box" v-html="renderMarkdown(page.content)"></div>
+        </div>
+      </div>
     </div>
-    <div class="max-w-4xl mx-auto">
-      <h1 class="text-3xl font-bold mb-6 text-slate-900 leading-tight">{{ page.title }}</h1>
-      <div class="content-box" v-html="renderMarkdown(page.content)"></div>
-    </div>
-  </div>
-</div>
   </div>
 </template>
 
