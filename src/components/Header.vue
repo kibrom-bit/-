@@ -12,7 +12,7 @@
         <div class="flex items-center gap-3">
           <router-link to="/" class="flex items-center gap-3">
             <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-gradient from-slate-800 to-slate-900 text-white font-serif text-sm shadow-sm">
-              መ
+            መ
             </div>
             <div class="flex flex-col">
               <h1 class="text-xs font-bold text-slate-800 tracking-tight leading-none">
