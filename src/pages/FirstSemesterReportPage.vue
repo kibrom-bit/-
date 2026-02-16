@@ -12,15 +12,15 @@
     
     <!-- Summary Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
-      <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100">
+      <div class=" from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100">
         <div class="text-3xl font-black text-blue-700 mb-2">85%</div>
         <div class="text-sm font-bold text-gray-700">የጉባኤ ሐዋርያት ማጠናቀቂያ</div>
       </div>
-      <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border border-green-100">
+      <div class=" from-green-50 to-emerald-50 p-6 rounded-xl border border-green-100">
         <div class="text-3xl font-black text-green-700 mb-2">600+</div>
         <div class="text-sm font-bold text-gray-700">የቴሌግራም ቻናል አባላት</div>
       </div>
-      <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl border border-amber-100">
+      <div class=" from-amber-50 to-orange-50 p-6 rounded-xl border border-amber-100">
         <div class="text-3xl font-black text-amber-700 mb-2">19K+</div>
         <div class="text-sm font-bold text-gray-700">ለበጎ አድራጎት የተሰበሰበ</div>
       </div>
