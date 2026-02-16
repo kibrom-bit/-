@@ -2,35 +2,35 @@
   <div class="min-h-screen bg-gray-50 relative font-['Noto_Sans_Ethiopic']">
     <!-- Progress Bar -->
     <div 
-      class="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 z-50 transition-all duration-200 shadow-lg shadow-blue-500/30"
+      class="fixed top-0 left-0 h-1  from-blue-500 to-purple-500 z-50 transition-all duration-200 shadow-lg shadow-blue-500/30"
       :style="{ width: scrollProgress + '%' }"
     ></div>
 
     <!-- Header spacer -->
     <div class="h-14"></div>
 
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6"> <!-- Reduced padding -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <!-- Page Header -->
-      <div class="mb-6 pb-4 border-b border-gray-200"> <!-- Reduced margins -->
+      <div class="mb-6 pb-4 border-b border-gray-200">
         <div class="flex justify-between items-start">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2 leading-tight">{{ pageTitle }}</h1> <!-- Reduced text size -->
+            <h1 class="text-3xl font-bold text-gray-900 mb-2 leading-tight">{{ pageTitle }}</h1>
           </div>
-          <div class="bg-gradient-to-br from-blue-500 to-purple-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-500/20"> <!-- Reduced size -->
+          <div class=" from-blue-500 to-purple-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-500/20">
             {{ pageId }}
           </div>
         </div>
       </div>
      
-      <!-- Page Content - Reduced padding -->
+      <!-- Page Content -->
       <div 
         ref="contentElement" 
-        class="bg-white rounded-xl p-6 shadow-sm mb-8 content-box" <!-- Changed: p-8 to p-6 -->
+        class="bg-white rounded-xl p-6 shadow-sm mb-8 content-box"
         v-html="formattedContent"
       ></div>
      
       <!-- Desktop Navigation -->
-      <div class="hidden md:flex justify-between items-center pt-6 border-t border-gray-200"> <!-- Reduced padding -->
+      <div class="hidden md:flex justify-between items-center pt-6 border-t border-gray-200">
         <button
           v-if="pageId > 1"
           @click="goToPage(pageId - 1)"
@@ -61,8 +61,8 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { marked } from 'marked'
 import type { Page } from '@/types/document'
+import { renderMarkdown } from '@/utils/markdown' // Use the same utility as reports
 
 interface Props {
   pages: Page[]
@@ -97,8 +97,11 @@ const goToPage = (pageNumber: number) => {
 }
 
 const formattedContent = computed(() => {
-  if (!currentPageData.value?.content) return '<p>ይህ ገጽ አሁን ባዶ ነው</p>'
-  return marked(currentPageData.value.content)
+  if (!currentPageData.value?.content) {
+    return '<p class="text-gray-500 italic">ይህ ገጽ አሁን ባዶ ነው</p>'
+  }
+  // Use the same renderMarkdown function that works for reports
+  return renderMarkdown(currentPageData.value.content)
 })
 
 const calculateScrollProgress = () => {
@@ -133,7 +136,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Remove all prose styles, use content-box from App.vue */
 @media (max-width: 768px) {
   .max-w-4xl {
     padding: 1rem 0.5rem 6rem;
