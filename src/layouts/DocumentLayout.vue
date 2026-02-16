@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-50 relative font-['Noto_Sans_Ethiopic']">
     <!-- Progress Bar -->
     <div 
-      class="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 z-50 transition-all duration-200 shadow-lg shadow-blue-500/30"
+      class="fixed top-0 left-0 h-1 from-blue-500 to-purple-500 z-50 transition-all duration-200 shadow-lg shadow-blue-500/30"
       :style="{ width: scrollProgress + '%' }"
     ></div>
 
@@ -18,7 +18,7 @@
             <h1 class="text-3xl font-bold text-gray-900 mb-2 leading-tight">{{ title }}</h1>
             <slot name="header-actions"></slot>
           </div>
-          <div class="bg-gradient-to-br from-blue-500 to-purple-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-500/20">
+          <div class=" from-blue-500 to-purple-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-500/20">
             {{ pageId }}
           </div>
         </div>
