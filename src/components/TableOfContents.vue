@@ -34,7 +34,7 @@
           </svg>
         </button>
         
-        <!-- Collapsible Content - Closed by Default -->
+        <!-- Collapsible Content -->
         <transition
           enter-active-class="transition-all duration-300 ease-in-out"
           enter-from-class="opacity-0 max-h-0"
@@ -63,10 +63,10 @@
                   </div>
                   <div class="min-w-0 flex-1">
                     <h4 class="font-medium text-slate-800 text-xs leading-tight">
-                      {{ page.title.replace('ገጽ ' + page.id + ' - ', '') }}
+                      {{ getManualPageTitle(page) }}
                     </h4>
                     <p class="text-slate-500 text-[10px] line-clamp-1">
-                      {{ page.department }}
+                      {{ page.department || getPreview(page.content) }}
                     </p>
                   </div>
                   <svg 
@@ -85,78 +85,45 @@
         </transition>
       </div>
 
-      <!-- Reports & Schedule Section -->
+      <!-- Reports & Schedule Section - Dynamic -->
       <div class="border border-gray-200 rounded-xl overflow-hidden">
         <div class="p-4 bg-white">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-100 to-green-100 flex items-center justify-center">
-              <span class="text-xs font-bold text-purple-700">ሪ/መ</span>
+              <span class="text-xs font-bold text-purple-700">{{ reportAndSchedulePages.length }}</span>
             </div>
             <h3 class="font-bold text-slate-900 text-sm">ሪፖርት እና መርሐ ግብር</h3>
           </div>
           
           <div class="space-y-2">
-            <!-- Report Page (101) -->
+            <!-- Dynamic List of All Report and Schedule Pages -->
             <div 
-              @click="handleReportSelection"
+              v-for="page in sortedReportAndSchedulePages" 
+              :key="page.id"
+              @click="handleReportOrScheduleSelection(page)"
               class="group p-3 rounded-lg cursor-pointer transition-all"
-              :class="currentPageId === 101
-                ? 'bg-purple-50 border border-purple-200' 
-                : 'hover:bg-gray-50 border border-transparent hover:border-gray-200'"
+              :class="getReportItemClass(page.id)"
             >
               <div class="flex items-start gap-3">
+                <!-- Dynamic icon based on page type or id -->
                 <div 
                   class="w-6 h-6 rounded-md flex items-center justify-center font-bold text-xs shrink-0"
-                  :class="currentPageId === 101 ? 'bg-purple-600 text-white' : 'bg-purple-100 text-purple-700'"
+                  :class="getReportItemIconClass(page.id)"
                 >
-                  ሪ
+                  {{ getPageIcon(page) }}
                 </div>
                 <div class="min-w-0 flex-1">
                   <h4 class="font-medium text-slate-800 text-xs leading-tight">
-                    የመጀመሪያ ሴሚስተር ሪፖርት
+                    {{ getPageDisplayTitle(page) }}
                   </h4>
                   <p class="text-slate-500 text-[10px] line-clamp-1">
-                    2018 ዓ.ም - ዲያቆን መድሃንዬ ነጋሽ
+                    {{ getPageDisplayDescription(page) }}
                   </p>
                 </div>
                 <svg 
-                  v-if="currentPageId === 101"
-                  class="w-3 h-3 text-purple-600 self-center" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-              </div>
-            </div>
-
-            <!-- Schedule Page (201) -->
-            <div 
-              @click="handleScheduleSelection"
-              class="group p-3 rounded-lg cursor-pointer transition-all"
-              :class="currentPageId === 201
-                ? 'bg-green-50 border border-green-200' 
-                : 'hover:bg-gray-50 border border-transparent hover:border-gray-200'"
-            >
-              <div class="flex items-start gap-3">
-                <div 
-                  class="w-6 h-6 rounded-md flex items-center justify-center font-bold text-xs shrink-0"
-                  :class="currentPageId === 201 ? 'bg-green-600 text-white' : 'bg-green-100 text-green-700'"
-                >
-                  መ
-                </div>
-                <div class="min-w-0 flex-1">
-                  <h4 class="font-medium text-slate-800 text-xs leading-tight">
-                    የሁለተኛ ሴሚስተር መርሐ ግብር
-                  </h4>
-                  <p class="text-slate-500 text-[10px] line-clamp-1">
-                    33 ተግባራት - የካቲት እስከ ግንቦት 2018 ዓ.ም
-                  </p>
-                </div>
-                <svg 
-                  v-if="currentPageId === 201"
-                  class="w-3 h-3 text-green-600 self-center" 
+                  v-if="currentPageId === page.id"
+                  class="w-3 h-3 text-current self-center" 
+                  :class="getCheckmarkColor(page.id)"
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -199,8 +166,17 @@ const manualPages = computed(() => {
   return props.pages.filter(page => page.id <= 11)
 })
 
+// Get all report and schedule pages (id > 100)
+const reportAndSchedulePages = computed(() => {
+  return props.pages.filter(page => page.id > 100)
+})
+
 const sortedManualPages = computed(() => {
   return [...manualPages.value].sort((a, b) => a.id - b.id)
+})
+
+const sortedReportAndSchedulePages = computed(() => {
+  return [...reportAndSchedulePages.value].sort((a, b) => a.id - b.id)
 })
 
 const currentPageId = computed(() => {
@@ -217,16 +193,98 @@ const handleSelection = (pageId: number) => {
   emit('close')
 }
 
-const handleReportSelection = () => {
-  emit('select-page', 101)
-  router.push('/report/first-semester-2018')
+// Dynamic handler for report/schedule pages
+const handleReportOrScheduleSelection = (page: Page) => {
+  emit('select-page', page.id)
+  
+  // Route based on page id
+  if (page.id === 101) {
+    router.push('/report/first-semester-2018')
+  } else if (page.id === 201) {
+    router.push('/schedule/second-semester-2018')
+  } else {
+    // For future pages, create a generic route
+    router.push(`/document/${page.id}`)
+  }
+  
   emit('close')
 }
 
-const handleScheduleSelection = () => {
-  emit('select-page', 201)
-  router.push('/schedule/second-semester-2018')
-  emit('close')
+// Get clean title for manual pages (remove "ገጽ X - " prefix)
+const getManualPageTitle = (page: Page): string => {
+  return page.title.replace(`ገጽ ${page.id} - `, '')
+}
+
+// Get icon for report/schedule page
+const getPageIcon = (page: Page): string => {
+  if (page.id === 101) return 'ሪ'
+  if (page.id === 201) return 'መ'
+  
+  // For future pages, use first character of title or department
+  const firstChar = page.title?.charAt(0) || page.department?.charAt(0) || '📄'
+  return firstChar
+}
+
+// Get display title from actual page data
+const getPageDisplayTitle = (page: Page): string => {
+  // Use the actual page title, but you can customize if needed
+  return page.title || 'ሰነድ'
+}
+
+// Get display description from actual page data
+const getPageDisplayDescription = (page: Page): string => {
+  // Use department if available, otherwise generate preview from content
+  if (page.department) return page.department
+  return getPreview(page.content)
+}
+
+// Dynamic class for report item based on id
+const getReportItemClass = (pageId: number): string => {
+  const baseClass = 'hover:bg-gray-50 border border-transparent hover:border-gray-200'
+  
+  if (pageId === 101) {
+    return currentPageId.value === 101
+      ? 'bg-purple-50 border border-purple-200'
+      : baseClass
+  }
+  
+  if (pageId === 201) {
+    return currentPageId.value === 201
+      ? 'bg-green-50 border border-green-200'
+      : baseClass
+  }
+  
+  // Default style for future pages
+  return currentPageId.value === pageId
+    ? 'bg-blue-50 border border-blue-200'
+    : baseClass
+}
+
+// Dynamic icon class
+const getReportItemIconClass = (pageId: number): string => {
+  if (pageId === 101) {
+    return currentPageId.value === 101
+      ? 'bg-purple-600 text-white'
+      : 'bg-purple-100 text-purple-700'
+  }
+  
+  if (pageId === 201) {
+    return currentPageId.value === 201
+      ? 'bg-green-600 text-white'
+      : 'bg-green-100 text-green-700'
+  }
+  
+  // Default style for future pages
+  return currentPageId.value === pageId
+    ? 'bg-blue-600 text-white'
+    : 'bg-blue-100 text-blue-700'
+}
+
+// Checkmark color
+const getCheckmarkColor = (pageId: number): string => {
+  if (pageId === 101) return 'text-purple-600'
+  if (pageId === 201) return 'text-green-600'
+  return 'text-blue-600'
 }
 
 const getPreview = (content: string): string => {
